@@ -6,4 +6,8 @@ __pycache__/
 
 # macOS / editor noise
 .DS_Store
+# *.codex
+*/test/*
+test/*
+
 *.codex

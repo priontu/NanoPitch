@@ -208,10 +208,22 @@ def augment_mel_batch(mel_clean, mel_noise, snr_range, device):
         gain_offset = -snr_db * (np.log(10.0) / 20.0)
         return torch.logaddexp(mel_clean, mel_noise + gain_offset)
 
-    This stub returns ``mel_clean`` unchanged so the trainer runs without
-    augmentation until you add the above (or your own variant).
+    This implementation draws one random SNR per sample and mixes in the
+    log-mel domain using ``logaddexp``.
     """
-    return mel_clean
+    snr_min, snr_max = float(snr_range[0]), float(snr_range[1])
+    B = mel_clean.size(0)
+
+    # One SNR per sample (broadcast across time and mel bins)
+    snr_db = torch.rand(B, 1, 1, device=device, dtype=mel_clean.dtype)
+    snr_db = snr_db * (snr_max - snr_min) + snr_min
+
+    # Convert SNR dB to additive offset in log-amplitude domain.
+    # Higher target SNR => lower injected noise level.
+    gain_offset = -snr_db * (np.log(10.0) / 20.0)
+
+    # log(exp(clean) + exp(noise + gain_offset))
+    return torch.logaddexp(mel_clean, mel_noise + gain_offset)
 
 
 # ═══════════════════════════════════════════════════════════════════════
