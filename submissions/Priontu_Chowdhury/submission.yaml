@@ -1,0 +1,2 @@
+name: "Priontu Chowdhury"
+note: "exp_v4_1 fine-tuned the best default baseline exp1 (default training, no noise addition, no SpecAugment) using the full augmented recipe (cond_size=64, gru_size=96, epochs=100, batch_size=384, lr=1.5e-3, min_lr=2e-5, seq_len=200, w_vad=0.1, w_pitch=1.5, snr_range=[-5,20], specaugment_band=2, time_mask=12, cosine annealing, early stopping, and 20-epoch SNR curriculum), and produced the best overall results."
